@@ -2,7 +2,7 @@ name: all web table data
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "0 0 */10 * *"
 
 jobs:
   run_extraction:
