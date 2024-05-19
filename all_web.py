@@ -1,10 +1,11 @@
+import json
+from urllib.parse import urlparse
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from bs4 import BeautifulSoup
-import json
+from datetime import datetime
 import os
-from urllib.parse import urlparse
 from pymongo import MongoClient
 
 def extract_store_name(url):
@@ -51,19 +52,40 @@ def extract_table_data(link, browser):
 # Load the JSON file containing the URLs
 with open('machine_data.json', 'r') as f:
     miner_data = json.load(f)
-    
+    miner_data = miner_data[0:2]
 
 # Set up Chrome options and service
 chrome_options = ChromeOptions()
 chrome_options.add_argument('--headless')  # Run Chrome in headless mode (no GUI)
-chrome_driver_path = r"chromedriver"
+chrome_driver_path = r"C:\Users\HP PC\Downloads\temprory\btc\btc_code\chromedriver-win64\chromedriver.exe"
 chrome_service = ChromeService(executable_path=chrome_driver_path)
 
 # Create a new instance of the Chrome webdriver
 browser = webdriver.Chrome(service=chrome_service, options=chrome_options)
 
+# Set to store unique entries
+unique_entries = {}
+
+# Iterate through each URL and extract the data
+for index, miner in enumerate(miner_data, start=1):
+    link = miner['link']
+    table_data = extract_table_data(link, browser)
+    
+    for entry in table_data:
+        store = entry['Store']
+        if store not in unique_entries:
+            unique_entries[store] = entry
+    
+    print(f"URL {index} completed: {link}")
+
+# Convert the unique entries to a list
+final_data = list(unique_entries.values())
+
+# Add a timestamp
+timestamp = datetime.now()
+
 # Connect to MongoDB (replace "mongodb://username:password@host:port/" with your MongoDB URL)
-mongo_url = os.environ.get('MONGODB_URI')
+mongo_url = os.getenv('MONGO_URL')
 client = MongoClient(mongo_url)
 
 # Access or create a MongoDB database named 'web_data'
@@ -72,19 +94,19 @@ db = client['web_data']
 # Access or create a MongoDB collection named 'all_websites'
 collection = db['all_websites']
 
-# Iterate through each URL and extract the data
-for index, miner in enumerate(miner_data, start=1):
-    link = miner['link']
-    table_data = extract_table_data(link, browser)
-    
-    for entry in table_data:
-        url = entry['URL']
-        store = entry['Store']
-        # Check if the store already exists in the collection
-        existing_entry = collection.find_one({"Store": store})
-        if not existing_entry:
-            # Insert the entry into the collection if the store doesn't exist
-            collection.insert_one(entry)
-            print(f"Added URL for store '{store}': {url}")
 
-print("Data has been saved to MongoDB collection 'all_websites' in database 'web_data'")
+# Create the data object with the extracted data and timestamp
+data_object = {
+    "timestamp": timestamp,
+    "data": final_data
+}
+
+# Save the final data to MongoDB collection
+collection.insert_one(data_object)
+
+
+# Close the browser
+browser.quit()
+
+
+print("Data has been saved to MongoDB Atlas collection 'all_websites'")
