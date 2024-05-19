@@ -51,7 +51,7 @@ def extract_table_data(link, browser):
 # Load the JSON file containing the URLs
 with open('machine_data.json', 'r') as f:
     miner_data = json.load(f)
-    miner_data = miner_data[0:2]
+    
 
 # Set up Chrome options and service
 chrome_options = ChromeOptions()
