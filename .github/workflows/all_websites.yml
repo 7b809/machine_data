@@ -24,4 +24,4 @@ jobs:
     - name: Run extraction script
       run: python all_web.py
       env:
-        MONGO_URL: ${{ secrets.MONGO_URL }}
+        MONGO_URL: ${{ secrets.MONGODB_URI }}
