@@ -79,11 +79,12 @@ for index, miner in enumerate(miner_data, start=1):
     
     for entry in table_data:
         url = entry['URL']
-        # Check if the URL already exists in the collection
-        if not collection.find_one({"URL": url}):
-            # Insert the entry into the collection if it's not already present
+        store = entry['Store']
+        # Check if the store already exists in the collection
+        existing_entry = collection.find_one({"Store": store})
+        if not existing_entry:
+            # Insert the entry into the collection if the store doesn't exist
             collection.insert_one(entry)
-    
-    print(f"URL {index} completed: {link}")
+            print(f"Added URL for store '{store}': {url}")
 
 print("Data has been saved to MongoDB collection 'all_websites' in database 'web_data'")
