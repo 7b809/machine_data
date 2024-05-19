@@ -4,8 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from bs4 import BeautifulSoup
-from datetime import datetime
 import os
+from datetime import datetime
 from pymongo import MongoClient
 
 def extract_store_name(url):
@@ -52,7 +52,7 @@ def extract_table_data(link, browser):
 # Load the JSON file containing the URLs
 with open('machine_data.json', 'r') as f:
     miner_data = json.load(f)
-    miner_data = miner_data[0:2]
+   
 
 # Set up Chrome options and service
 chrome_options = ChromeOptions()
