@@ -24,6 +24,10 @@ def extract_table_data(link, browser):
     soup = BeautifulSoup(html_content, 'html.parser')
     table = soup.find('table', {'id': 'datatable_opportunities'})
 
+    if not table:
+        print(f"No table found on page: {link}")
+        return []
+
     rows = []
     for tr in table.find('tbody').find_all('tr'):
         cells = tr.find_all('td')
@@ -52,7 +56,6 @@ def extract_table_data(link, browser):
 # Load the JSON file containing the URLs
 with open('machine_data.json', 'r') as f:
     miner_data = json.load(f)
-   
 
 # Set up Chrome options and service
 chrome_options = ChromeOptions()
@@ -94,7 +97,6 @@ db = client['web_data']
 # Access or create a MongoDB collection named 'all_websites'
 collection = db['all_websites']
 
-
 # Create the data object with the extracted data and timestamp
 data_object = {
     "timestamp": timestamp,
@@ -104,9 +106,7 @@ data_object = {
 # Save the final data to MongoDB collection
 collection.insert_one(data_object)
 
-
 # Close the browser
 browser.quit()
-
 
 print("Data has been saved to MongoDB Atlas collection 'all_websites'")
