@@ -2,8 +2,7 @@ name: web_1
 
 on:
   schedule:
-    # - cron: "0 0 */10 * *"
-      - cron: "*/5 * * * *"
+    - cron: "0 0 */10 * *"
 
 
 jobs:
