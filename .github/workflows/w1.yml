@@ -24,6 +24,6 @@ jobs:
         pip install pymongo selenium beautifulsoup4
 
     - name: Run extraction script
-      run: python all_web.py
+      run: python w1.py
       env:
         MONGO_URL: ${{ secrets.MONGODB_URI }}
