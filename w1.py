@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 from pymongo import MongoClient
 import os
+
 # Function to initialize the browser instance
 def initialize_browser():
     # Set up Chrome options and service
@@ -74,16 +75,29 @@ base_url = 'https://cooldragon.com.cn/product-category/miners/'
 browser = initialize_browser()
 num_pages = get_total_pages(base_url, browser)
 
+# List to store all products data
+all_products_data = {}
+
+# Variable to keep track of the total product count
+product_count = 0
+
 # Iterate over each page and scrape data
 for page_number in range(1, num_pages + 1):
     url = f'{base_url}page/{page_number}?orderby=price'
     page_data = scrape_page(url, browser)
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    page_data['timestamp'] = timestamp  # Add timestamp to the data
     
-    # Insert the data into MongoDB
-    collection.insert_one(page_data)
+    # Update product count and merge page data into all products data
+    for key, value in page_data.items():
+        product_count += 1
+        all_products_data[f'product {product_count}'] = value
+    
     print(f'Page {page_number} completed out of {num_pages}')
+
+# Add timestamp to the aggregated data
+all_products_data['timestamp'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+# Insert the aggregated data into MongoDB
+collection.insert_one(all_products_data)
 
 print(f'Successfully saved data from {num_pages} pages to MongoDB Atlas')
 
