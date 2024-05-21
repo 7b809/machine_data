@@ -42,6 +42,7 @@ def scrape_page(url, browser):
         title = product.select_one('h2.woocommerce-loop-product__title').text
         image = product.select_one('div.astra-shop-thumbnail-wrap img')['src']
         price_span = product.select_one('span.price')
+        product_url = product.select_one('a')['href']
         
         # Extract price range
         price_range = price_span.select('.woocommerce-Price-amount')
@@ -56,7 +57,8 @@ def scrape_page(url, browser):
             'title': title,
             'image': image,
             'deleted_price': deleted_price_amount,
-            'current_price': current_price_amount
+            'current_price': current_price_amount,
+            'product_url': product_url
         }
     return page_data
 
