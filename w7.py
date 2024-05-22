@@ -13,7 +13,7 @@ def scrape_product_data(url, product_number):
     # Set up Chrome options and service
     chrome_options = ChromeOptions()
     chrome_options.add_argument('--headless')  # Run Chrome in headless mode (no GUI)
-    chrome_driver_path = r"C:\Users\HP PC\Downloads\temprory\btc\btc_code\chromedriver-win64\chromedriver.exe"
+    chrome_driver_path = r"chromedriver"
     chrome_service = ChromeService(executable_path=chrome_driver_path)
 
     # Create a new instance of the Chrome webdriver
