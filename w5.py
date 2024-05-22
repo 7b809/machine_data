@@ -72,7 +72,7 @@ for page_number in range(1, total_pages+1):  # Assuming 11 pages
     for i, product_div in enumerate(product_divs, start=1):
         product_info = extract_product_info(product_div)
         product_list.append({"product_number": i, "product_info": product_info})
-    
+    print(product_list)
     all_products_data.append(product_list)
     page_number += 1
 
