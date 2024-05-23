@@ -25,7 +25,7 @@ products_data = []
 
 # URL base to scrape
 base_url = 'https://coinminingcentral.com/collections/all-miners?page='
-total_pages = 5 # Specify the total number of pages to scrape
+total_pages = 14 # Specify the total number of pages to scrape
 
 for page_number in range(1, total_pages + 1):
     # Construct the URL for the current page
