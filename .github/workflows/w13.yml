@@ -1,0 +1,30 @@
+name: web_13
+
+on:
+  schedule:
+      # - cron: "*/2 * * * *"
+
+    - cron: "0 0 */10 * *"
+
+
+jobs:
+  run_extraction:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Install dependencies
+      run: |
+        pip install pymongo selenium beautifulsoup4
+
+    - name: Run extraction script
+      run: python w13.py
+      env:
+        MONGO_URL: ${{ secrets.MONGODB_URI }}
