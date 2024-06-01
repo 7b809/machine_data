@@ -67,7 +67,7 @@ for index, item in enumerate(product_items, start=1):
 
 
 
-url =  os.getenc("MONGO_URL")
+url =  os.getenv("MONGO_URL")
 db_name =  "web_data"
 collection_name = "asicMarket"
 
