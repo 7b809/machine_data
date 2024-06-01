@@ -82,7 +82,7 @@ browser.quit()
 
 
 
-url =  os.getenc("MONGO_URL")
+url =  os.getenv("MONGO_URL")
 db_name =  "web_data"
 collection_name = "coinMining"
 
